@@ -23,19 +23,11 @@ jobs:
       - name: Run tests
         run: pytest
 
+      - name: Create build artifact
+        run: zip -r build-package.zip .
 
-  docker-build:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t darshan15555/calculator-app .
-
-      - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DARSHAN15555 }}" --password-stdin
-
-      - name: Push Docker image
-        run: docker push darshan15555/calculator-app
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-package
+          path: build-package.zip
